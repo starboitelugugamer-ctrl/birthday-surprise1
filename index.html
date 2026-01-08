@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Birthday Surprise 🎂</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: radial-gradient(circle at top, #ffe6f0, #ff8fb1);
+            height: 100vh;
+            overflow: hidden;
+            padding-top: 60px;
+        }
+
+        h1 {
+            animation: floatTitle 2.5s ease-in-out infinite;
+        }
+
+        @keyframes floatTitle {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        button {
+            font-size: 20px;
+            padding: 14px 36px;
+            background: linear-gradient(45deg, #ff3366, #ff6f91);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            animation: pulse 1.6s infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        button.hidden {
+            display: none;
+        }
+
+        #message {
+            margin-top: 35px;
+            font-size: 28px;
+            color: #7a0030;
+            opacity: 0;
+            transform: scale(0.6);
+            transition: all 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+
+        #message.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* 💓 Vibrating exploding hearts */
+        .heart {
+            position: absolute;
+            font-size: 26px;
+            pointer-events: none;
+            animation:
+                explode 1.4s ease-out forwards,
+                vibrate 0.15s infinite;
+        }
+
+        @keyframes explode {
+            0% { transform: translate(0,0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        }
+
+        @keyframes vibrate {
+            0% { transform: translate(0,0); }
+            25% { transform: translate(2px,-2px); }
+            50% { transform: translate(-2px,2px); }
+            75% { transform: translate(2px,2px); }
+            100% { transform: translate(-2px,-2px); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎉 Happy Birthday 🎉</h1>
+    <p> I miss you bangaram  💌</p>
+
+    <button id="btn" onclick="nextMessage()">Click Me 💖</button>
+
+    <div id="message"></div>
+
+    <script>
+        // 👉 CHANGE ONLY THIS
+        const crushName = "Bangaram";
+
+        const messages = [
+            `🎂 Happy Birthday, ${crushName}! 😊`,
+            `${crushName}, you make everything brighter ✨`,
+            `Someone really admires you 💫`,
+            `${crushName}, you’ve been on my mind a lot 💖`,
+            `I wanted this to feel special 😌`,
+            `Okay ${crushName}… last click i'm really sorry ❤️`,
+            `💘 ${crushName}, I love you `
+        ];
+
+        let index = 0;
+
+        function nextMessage() {
+            const msg = document.getElementById("message");
+            const btn = document.getElementById("btn");
+
+            // hide button after click
+            btn.classList.add("hidden");
+
+            msg.classList.remove("show");
+
+            setTimeout(() => {
+                msg.innerHTML = messages[index];
+                msg.classList.add("show");
+
+                // FINAL CLICK
+                if (index === messages.length - 1) {
+                    const rect = msg.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+
+                    // Vibrating heart explosion
+                    for (let i = 0; i < 45; i++) {
+                        let heart = document.createElement("div");
+                        heart.className = "heart";
+                        heart.innerHTML = "💖";
+
+                        heart.style.setProperty("--x", (Math.random() - 0.5) * 550 + "px");
+                        heart.style.setProperty("--y", (Math.random() - 0.5) * 550 + "px");
+                        heart.style.left = cx + "px";
+                        heart.style.top = cy + "px";
+
+                        document.body.appendChild(heart);
+                        setTimeout(() => heart.remove(), 1400);
+                    }
+                } else {
+                    // show button again after animation
+                    setTimeout(() => {
+                        btn.classList.remove("hidden");
+                    }, 800);
+                }
+
+                index++;
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
+
